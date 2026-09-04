@@ -1,6 +1,6 @@
 # g3w-admin-panoramax
 
-Proof of concept Django plugin for G3W-ADMIN/G3W-CLIENT that adds a **Panoramax** map control to every project: click on the map (or use the map context menu) to view the nearest [Panoramax](https://panoramax.fr/) street-level 360° image, if any is available at that location.
+Proof of concept G3W-SUITE plugin that adds a **Panoramax** map control to your published maps: click on the map (or use the map context menu) to view the nearest [Panoramax](https://panoramax.fr/) street-level 360° image, if any is available at that location.
 
 <img width="1266" height="913" alt="image" src="https://github.com/user-attachments/assets/62e12070-f9af-4ade-8bfe-ca340d46ad0e" />
 

@@ -55,6 +55,12 @@ make install   # fetch shared versioning/venv Makefiles
 
 Version numbers are derived from git tags via `setuptools_scm` (see `_version.py`, generated at build time and not tracked in git).
 
-## License
+---
 
-[Mozilla Public License 2.0 (MPL 2.0)](LICENSE)
+**Compatibile with:**
+[![g3w-admin version](https://img.shields.io/badge/g3w--admin-3.11-1EB300.svg?style=flat)](https://github.com/g3w-suite/g3w-admin/tree/v.3.11.x)
+[![g3w-suite-docker version](https://img.shields.io/badge/g3w--suite--docker-3.11-1EB300.svg?style=flat)](https://github.com/g3w-suite/g3w-suite-docker/tree/v3.11.x)
+
+---
+
+**License:** MPL-2

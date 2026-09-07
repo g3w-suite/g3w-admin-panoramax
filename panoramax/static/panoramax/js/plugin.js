@@ -72,6 +72,7 @@
       source: new ol.source.VectorTile({
         format: new ol.format.MVT(),
         url:    `${this.#API}/map/{z}/{x}/{y}.mvt`,
+        maxZoom: 15,
       }),
       style: feature => new ol.style.Style(
         'Point' === feature.getGeometry().getType()

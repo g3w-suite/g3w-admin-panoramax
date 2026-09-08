@@ -180,10 +180,16 @@
       this.#map.addLayer(this.#layer);
 
       this._interaction.on('picked', ({ coordinate }) => {
-        this.showPanoramax(coordinate);
-        if (this._autountoggle) {
-          this.toggle();
+        //show panomax only if the clicked coordinate is within the coverage layer
+        if (this.#map.getFeaturesAtPixel(this.#map.getPixelFromCoordinate(coordinate), {
+          layerFilter: l => l === this.#coverage,
+        }).length > 0) {
+          this.showPanoramax(coordinate);
+          if (this._autountoggle) {
+            this.toggle();
+          }
         }
+        
       });
     }
 

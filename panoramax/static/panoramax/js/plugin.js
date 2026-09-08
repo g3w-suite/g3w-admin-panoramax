@@ -51,6 +51,9 @@
     /** @type {object} current photo-sphere-viewer instance */
     #viewer = null;
 
+    /** @type {Array<ol.EventsKey>} */
+    #keysEvent = [];
+
     /** @type {ol.layer.Vector} */
     #layer = new ol.layer.Vector({
       source: new ol.source.Vector({ features: [] }),
@@ -171,26 +174,21 @@
         .catch(e => { console.warn(e); GUI.closeContent(); });
     }
 
+    getPanoramaxAtPixel(pixel) {
+      return this.#map.getFeaturesAtPixel(pixel, {
+        layerFilter: l => l === this.#coverage,
+      });
+    }
+
     setMap(map) {
+      console.log(map)
       this.#map = map;
 
       super.setMap(map);
 
       this.#map.addLayer(this.#coverage);
       this.#map.addLayer(this.#layer);
-
-      this._interaction.on('picked', ({ coordinate }) => {
-        //show panomax only if the clicked coordinate is within the coverage layer
-        if (this.#map.getFeaturesAtPixel(this.#map.getPixelFromCoordinate(coordinate), {
-          layerFilter: l => l === this.#coverage,
-        }).length > 0) {
-          this.showPanoramax(coordinate);
-          if (this._autountoggle) {
-            this.toggle();
-          }
-        }
-        
-      });
+      
     }
 
     /** @param {ol.Coordinate} coordinate map coordinate (control's projection) to look up */
@@ -206,6 +204,7 @@
       this.#marker.setGeometry(null);
       this.#viewer?.destroy();
       this.#viewer = null;
+      this.#keysEvent.forEach(e => ol?.unByKey?.(e));
       if (this.active) {
         GUI.closeContent();
       }
@@ -218,6 +217,20 @@
       this.#coverage.setVisible(this.isToggled());
       if (this.isToggled()) {
         this.#layer.getSource().addFeatures([this.#marker]);
+        // add event listeners for picking coordinates and changing cursor style
+        this.#keysEvent.push(this._interaction.on('picked', ({ coordinate }) => {
+        //show panomax only if the clicked coordinate is within the coverage layer
+          if (this.getPanoramaxAtPixel(this.#map.getPixelFromCoordinate(coordinate)).length > 0) {
+            this.showPanoramax(coordinate);
+            if (this._autountoggle) {
+              this.toggle();
+            }
+          }
+        }));
+        // change cursor to pointer when hovering over coverage layer features
+        this.#keysEvent.push(this.#map.on('pointermove', e => {
+          this.#map.getTargetElement().style.cursor = this.getPanoramaxAtPixel(e.pixel).length > 0 ? 'pointer' : '';
+        }));
       } else {
         this.clear();
       }

@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: g3w-suite/.github/.github/workflows/ci.yml@main

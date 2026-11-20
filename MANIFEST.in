@@ -1,2 +1,3 @@
 include README.md
 recursive-include panoramax/static *
+prune panoramax/tests

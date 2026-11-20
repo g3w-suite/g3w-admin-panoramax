@@ -13,7 +13,7 @@ description = "G3W-ADMIN plugin that enables Panoramax controls on all maps."
 readme = "README.md"
 license = { text = "Mozilla Public License 2.0 (MPL 2.0)" }
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Django",
     "Intended Audience :: Developers",
@@ -26,9 +26,13 @@ classifiers = [
 "Homepage" = "https://github.com/g3w-suite/g3w-admin-panoramax"
 "Bug Tracker" = "https://github.com/g3w-suite/g3w-admin-panoramax/issues"
 
-[tool.setuptools]
-packages = ["panoramax"]
-package-dir = { panoramax = "panoramax" }
+[tool.setuptools.packages.find]
+include = ["panoramax*"]
+exclude = ["*.tests", "*.tests.*"]
+namespaces = false
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests/*", "tests/**/*"]
 
 [tool.setuptools.package-data]
 panoramax = ["static/panoramax/js/*.js"]

@@ -1,0 +1,44 @@
+# Keep the publisher workflow local for PyPI OIDC; release implementation is shared.
+name: CD
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.repository }}
+  queue: max
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - id: prepare
+        uses: g3w-suite/.github/.github/actions/plugin-cd@main
+        with:
+          github-token: ${{ github.token }}
+      - name: Publish to PyPI
+        if: ${{ steps.prepare.outputs.proceed == 'true' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+      - name: Create release
+        if: ${{ success() && steps.prepare.outputs.proceed == 'true' }}
+        uses: g3w-suite/.github/.github/actions/plugin-cd-release@main
+        with:
+          github-token: ${{ github.token }}
+          tag: ${{ steps.prepare.outputs.tag }}
+          existing: ${{ steps.prepare.outputs.existing }}
+          commit-sha: ${{ github.event.workflow_run.head_sha }}
+          branch: ${{ github.event.workflow_run.head_branch }}

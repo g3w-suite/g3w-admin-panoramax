@@ -1,4 +1,6 @@
-# g3w-admin-panoramax
+# G3W-ADMIN-PANORAMAX
+
+[![PyPI version](https://img.shields.io/pypi/v/g3w-admin-panoramax)](https://pypi.org/project/g3w-admin-panoramax/)
 
 Proof of concept G3W-SUITE plugin that adds a **Panoramax** map control to your published maps: click on the map (or use the map context menu) to view the nearest [Panoramax](https://panoramax.fr/) street-level 360° image, if any is available at that location.
 
@@ -47,13 +49,21 @@ Refer to [g3w-suite-docker](https://github.com/g3w-suite/g3w-suite-docker) repos
 
 No server-side settings are required. Once installed and enabled, the control is automatically shown on every project's map.
 
-## Development
+## Development and tests
+
+Version numbers are derived from git tags via `setuptools_scm`.
+The BDD scenarios are in [`panoramax/tests/features`](panoramax/tests/features)
+and run in the G3W-ADMIN/QGIS environment used by CI. Install test dependencies:
 
 ```sh
-make install   # fetch shared versioning/venv Makefiles
+python3 -m pip install -r requirements_test.txt
 ```
 
-Version numbers are derived from git tags via `setuptools_scm` (see `_version.py`, generated at build time and not tracked in git).
+From the configured G3W-ADMIN directory, run:
+
+```sh
+python3 manage.py behave --simple panoramax/tests
+```
 
 ---
 
